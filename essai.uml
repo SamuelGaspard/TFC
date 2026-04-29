@@ -1,0 +1,23 @@
+@startuml
+left to right direction
+actor "Administrateur Système" as Admin
+
+rectangle "Système d'Infrastructure DevOps" {
+  usecase "Orchestrer les Applications" as UC1
+  usecase "Ingérer les modifications" as UC2
+  usecase "Automatisation de déploiement" as UC3
+  usecase "Gérer les versions" as UC4
+  usecase "S'authentifier" as UC5
+}
+
+Admin -- UC5
+Admin -- UC1
+Admin -- UC2
+Admin -- UC3
+Admin -- UC4
+
+UC1 ..> UC5 : <<include>>
+UC2 ..> UC5 : <<include>>
+UC3 ..> UC5 : <<include>>
+UC4 ..> UC5 : <<include>>
+@endum
