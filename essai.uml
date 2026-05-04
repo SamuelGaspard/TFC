@@ -1,23 +1,44 @@
-@startuml
-left to right direction
-actor "Administrateur Système" as Admin
+@startuml Gestion_Parc_Informatique
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
 
-rectangle "Système d'Infrastructure DevOps" {
-  usecase "Orchestrer les Applications" as UC1
-  usecase "Ingérer les modifications" as UC2
-  usecase "Automatisation de déploiement" as UC3
-  usecase "Gérer les versions" as UC4
-  usecase "S'authentifier" as UC5
+actor "Administrateur Système" as Admin #LightBlue
+actor "Active Directory" as AD <<System>> #Yellow
+actor "Utilisateurs Parc" as Users #LightGreen
+
+package "Plateforme de Gestion Centralisée" {
+  usecase "Authentification Centralisée" as UC1
+  usecase "Gestion des Identités & Accès" as UC2
+  usecase "Déploiement Automatisé d'Applications" as UC3
+  usecase "Configuration des Politiques de Sécurité" as UC4
+  usecase "Application des Correctifs (Updates)" as UC5
+  usecase "Reporting & Monitoring du Parc" as UC6
 }
 
-Admin -- UC5
-Admin -- UC1
-Admin -- UC2
-Admin -- UC3
-Admin -- UC4
+' Relations de l'Admin
+Admin --> UC1
+Admin --> UC2
+Admin --> UC3
+Admin --> UC4
+Admin --> UC6
 
-UC1 ..> UC5 : <<include>>
-UC2 ..> UC5 : <<include>>
-UC3 ..> UC5 : <<include>>
-UC4 ..> UC5 : <<include>>
-@endum
+' Relations de l'AD
+UC1 -- AD
+UC2 -- AD
+
+' Inclusions et Extensions
+UC2 ..> UC1 : <<include>>
+UC3 ..> UC1 : <<include>>
+UC4 ..> UC1 : <<include>>
+UC5 ..> UC4 : <<extend>>
+
+' Lien Utilisateur
+Users -- UC1
+
+note right of UC5
+  L'extension permet d'appliquer 
+  les mises à jour après avoir 
+  défini les règles de sécurité.
+end note
+
+@endum 
