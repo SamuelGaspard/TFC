@@ -1,4 +1,4 @@
-@startuml
+@startuml Gestion_Parc_Informatique
 skinparam actorStyle awesome
 skinparam packageStyle rectangle
 
@@ -41,4 +41,4 @@ note right of UC5
   défini les règles de sécurité.
 end note
 
-@endum
+@endum 
