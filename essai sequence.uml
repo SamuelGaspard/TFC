@@ -1,0 +1,44 @@
+@startuml
+autonumber
+skinparam Style strictuml
+
+actor "Admin Sys" as Admin
+box "Gestion & Identité" #GhostWhite
+    participant "Serveur Ansible" as Ansible <<Master>>
+    participant "Active Directory" as AD <<LDAP/Krb>>
+end box
+
+box "Infrastructure Ruashi" #FloralWhite
+    participant "Clients Windows" as Win
+    participant "Clients Linux" as Lin
+end box
+
+Admin -> Ansible: Déclencher Playbook (YAML)
+activate Ansible
+
+Ansible -> AD: Requête d'authentification (LDAP)
+activate AD
+alt Authentification Réussie
+    AD --> Ansible: Token de session / Succès
+    
+    group Déploiement Hétérogène
+        par 
+            Ansible -> Win: Connexion WinRM (Port 5986)
+            Win --> Ansible: OK
+            Ansible -> Win: Installation Logiciels / GPO
+        else
+            Ansible -> Lin: Connexion SSH (Port 22)
+            Lin --> Ansible: OK
+            Ansible -> Lin: Configuration SSSD / Scripts
+        end
+    end
+    
+    Ansible -> Admin: Rapport de conformité (JSON/HTML)
+else Authentification Échouée
+    AD --> Ansible: Accès Refusé
+    Ansible -> Admin: Alerte Sécurité / Échec
+end
+deactivate AD
+deactivate Ansible
+
+@endum
