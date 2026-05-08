@@ -1,0 +1,26 @@
+@startuml
+autonumber
+title Séquence UC01 & UC02 : Authentification et Gestion des Accès
+
+actor "Utilisateur / Admin" as User
+participant "Active Directory" as AD <<System>>
+participant "Postes Clients" as Clients
+
+== Cas UC02 : Gestion des comptes (Admin) ==
+User -> AD : Créer/Modifier compte (Admin Console)
+activate AD
+AD -> AD : Enregistrer dans la base NTDS.dit
+AD --> User : Confirmation de la mise à jour
+deactivate AD
+
+== Cas UC01 : Authentification (User) ==
+User -> Clients : Saisie Identifiants (Login/Pass)
+activate Clients
+Clients -> AD : Requête d'authentification (Kerberos/LDAP)
+activate AD
+AD -> AD : Vérification des hashs et GPO
+AD --> Clients : Ticket d'accès / Autorisation
+deactivate AD
+Clients --> User : Session ouverte (Desktop chargé)
+deactivate Clients
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+autonumber
+title Séquence UC06 : Supervision et Inventaire du Parc
+
+actor "Administrateur" as Admin
+participant "Serveur Ansible" as Ansible
+participant "Parc Informatique" as Parc
+
+Admin -> Ansible : Lancer collecte d'inventaire (Setup Module)
+activate Ansible
+
+Ansible -> Parc : Requête de collecte des "Facts"
+activate Parc
+Parc --> Ansible : Retourne JSON (RAM, CPU, Softwares, OS)
+deactivate Parc
+
+Ansible -> Ansible : Consolidation des données
+Ansible --> Admin : Affichage du rapport de conformité/inventaire
+deactivate Ansible
+@enduml

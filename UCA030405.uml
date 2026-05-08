@@ -1,0 +1,35 @@
+@startuml
+autonumber
+title Séquence UC03, UC04 & UC05 : Déploiement et Sécurité (Ansible)
+
+actor "Administrateur" as Admin
+participant "Serveur Ansible" as Ansible <<Orchestrateur>>
+participant "Active Directory" as AD <<Authentificateur>>
+participant "Nœuds Clients (Win/Lin)" as Clients
+
+Admin -> Ansible : Exécuter Playbook (Configuration/App/Update)
+activate Ansible
+
+Ansible -> AD : Vérifier droits d'exécution (Privileged Account)
+activate AD
+AD --> Ansible : Validation (OK)
+deactivate AD
+
+group Exécution Hétérogène
+    Ansible -> Clients : Connexion Sécurisée (WinRM/SSH)
+    activate Clients
+    
+    Ansible -> Clients : Vérifier état actuel (Idempotence)
+    
+    alt État non conforme
+        Ansible -> Clients : Appliquer changements (UC03/UC04/UC05)
+        Clients --> Ansible : État mis à jour (Changed)
+    else État déjà conforme
+        Clients --> Ansible : Aucun changement requis (OK)
+    end
+end
+
+Ansible --> Admin : Rapport final d'exécution (Play Recap)
+deactivate Clients
+deactivate Ansible
+@enduml
