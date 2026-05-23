@@ -1,43 +1,41 @@
 @startuml
 "Diagramme d'exigences" as Title
 
-skinparam requirementBorderColor DarkBlue
-skinparam requirementBackgroundColor LightBlue
-skinparam requirementFontColor Black
-skinparam requirementFontSize 12
-
-package "Exigences du système de gestion de parc" {
-    requirement "R1 - Authentification centralisée" as R1 {
-        Garantir l'accès aux utilisateurs et administrateurs via Active Directory.
-    }
-
-    requirement "R2 - Gestion des identités et des accès" as R2 {
-        Permettre la création, modification et validation des comptes et des droits.
-    }
-
-    requirement "R3 - Déploiement automatisé" as R3 {
-        Déployer des applications et configurations sur les postes via Ansible.
-    }
-
-    requirement "R4 - Politiques de sécurité" as R4 {
-        Appliquer et maintenir des règles de sécurité centralisées.
-    }
-
-    requirement "R5 - Mise à jour et correctifs" as R5 {
-        Appliquer les mises à jour et correctifs après validation des politiques de sécurité.
-    }
-
-    requirement "R6 - Reporting et supervision" as R6 {
-        Collecter des informations d'inventaire et générer des rapports de conformité.
-    }
+left to right direction
+skinparam linetype ortho
+skinparam ArrowColor DarkBlue
+skinparam ArrowFontSize 11
+skinparam ArrowThickness 2
+skinparam class {
+  BackgroundColor LightBlue
+  BorderColor DarkBlue
+  FontSize 12
+  Padding 8
 }
 
-R2 -[#blue]-> R1 : <<refine>>
-R3 -[#blue]-> R1 : <<satisfy>>
-R4 -[#blue]-> R1 : <<satisfy>>
-R5 -[#blue]-> R4 : <<derive>>
-R6 -[#blue]-> R2 : <<satisfy>>
-R6 -[#blue]-> R3 : <<verify>>
+package "Exigences du système de gestion de parc" {
+  class "R1\nAuthentification" as R1 <<requirement>>
+  class "R2\nIdentités" as R2 <<requirement>>
+  class "R3\nDéploiement" as R3 <<requirement>>
+  class "R4\nSécurité" as R4 <<requirement>>
+  class "R5\nCorrectifs" as R5 <<requirement>>
+  class "R6\nReporting" as R6 <<requirement>>
+}
+
+' Organiser la disposition pour réduire les chevauchements
+R1 -[hidden]-> R2
+R2 -[hidden]-> R3
+R3 -[hidden]-> R4
+R4 -[hidden]-> R5
+R5 -[hidden]-> R6
+
+' Relations visibles avec labels et couleurs
+R2 -[#0000CC,thickness=2]-> R1 : refine
+R3 -[#006600,thickness=2]-> R1 : satisfy
+R4 -[#CC0000,thickness=2]-> R1 : satisfy
+R5 -[#CC6600,thickness=2]-> R4 : derive
+R6 -[#6600CC,thickness=2]-> R2 : satisfy
+R6 -[#006699,thickness=2]-> R3 : verify
 
 note right of R1
   Authentification via Kerberos/LDAP
