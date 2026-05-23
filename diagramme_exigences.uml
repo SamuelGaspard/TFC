@@ -14,12 +14,12 @@ skinparam class {
 }
 
 package "Exigences du système de gestion de parc" {
-  class "R1\nAuthentification" as R1 <<requirement>>
-  class "R2\nIdentités" as R2 <<requirement>>
-  class "R3\nDéploiement" as R3 <<requirement>>
-  class "R4\nSécurité" as R4 <<requirement>>
-  class "R5\nCorrectifs" as R5 <<requirement>>
-  class "R6\nReporting" as R6 <<requirement>>
+  rectangle "R1\nAuthentification" as R1
+  rectangle "R2\nIdentités" as R2
+  rectangle "R3\nDéploiement" as R3
+  rectangle "R4\nSécurité" as R4
+  rectangle "R5\nCorrectifs" as R5
+  rectangle "R6\nReporting" as R6
 }
 
 ' Organiser la disposition pour réduire les chevauchements
